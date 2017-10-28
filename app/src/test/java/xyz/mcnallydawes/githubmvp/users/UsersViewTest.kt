@@ -1,7 +1,7 @@
 package xyz.mcnallydawes.githubmvp.users
 
 import kotlinx.android.synthetic.main.fragment_users.*
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -9,12 +9,15 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import xyz.mcnallydawes.githubmvp.data.model.local.User
 
 @RunWith(RobolectricTestRunner::class)
 class UsersViewTest {
 
     private lateinit var view: UsersFragment
     @Mock private lateinit var presenter: UsersContract.Presenter
+
+    private val dummyUser = User(0, "", "", "")
 
     @Before
     fun setUp() {
@@ -33,6 +36,61 @@ class UsersViewTest {
         view.setupUserList()
         assertNotNull(view.recyclerView.layoutManager)
         assertNotNull(view.recyclerView.adapter)
+    }
+
+    @Test
+    fun testAddUser() {
+        view.setupUserList()
+
+//        expect one item in list at start, which represents the progress bar
+        assertEquals(1, view.recyclerView.adapter.itemCount)
+
+        view.addUser(dummyUser)
+
+        assertEquals(2, view.recyclerView.adapter.itemCount)
+    }
+
+    @Test
+    fun testAddUsers() {
+        view.setupUserList()
+        view.addUsers(arrayListOf(dummyUser, dummyUser))
+
+        assertEquals(3, view.recyclerView.adapter.itemCount)
+    }
+
+    @Test
+    fun testUpdateUser() {
+        view.setupUserList()
+        view.addUser(dummyUser)
+
+        dummyUser.username = "a"
+
+        view.updateUser(dummyUser)
+
+        fail("need method to verify user is updated")
+    }
+
+    @Test
+    fun testRemoveUser() {
+        view.setupUserList()
+        view.addUser(dummyUser)
+        view.removeUser(dummyUser)
+
+        assertEquals(1, view.recyclerView.adapter.itemCount)
+    }
+
+    @Test
+    fun testShowErrorMessage() {
+        view.showErrorMessage()
+
+        fail("not implemented")
+    }
+
+    @Test
+    fun testShowUserView() {
+        view.showUserView(dummyUser)
+        
+        fail("not implemented")
     }
 
 }
