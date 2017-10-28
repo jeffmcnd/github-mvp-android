@@ -14,6 +14,8 @@ import xyz.mcnallydawes.githubmvp.data.model.local.User
 
 class UsersFragment: Fragment(), UsersContract.View {
 
+    private val VISIBLE_THRESHOLD = 5
+
     private var presenter: UsersContract.Presenter? = null
 
     private var adapter : UserAdapter? = null
@@ -48,8 +50,11 @@ class UsersFragment: Fragment(), UsersContract.View {
         recyclerView.adapter = adapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (dy > 0) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                if (totalItemCount <= lastVisibleItem + VISIBLE_THRESHOLD) {
                     presenter?.onNextPage()
                 }
             }
