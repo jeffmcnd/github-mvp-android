@@ -20,7 +20,6 @@ class UsersPresenter(
 
     override fun initialize() {
         view.setupUsersList()
-        onNextPage()
     }
 
     override fun onUserClicked(user: User) {

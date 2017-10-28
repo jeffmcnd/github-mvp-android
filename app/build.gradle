@@ -28,9 +28,11 @@ android {
 }
 
 ext {
-    supportLibVersion = '26.1.0'
     constraintLayoutVersion = '1.0.2'
+    mockitoVersion = '2.10.0'
     picassoVersion = '2.5.2'
+    robolectricVersion = '3.5'
+    supportLibVersion = '26.1.0'
 }
 
 dependencies {
@@ -51,6 +53,10 @@ dependencies {
     compile "com.squareup.picasso:picasso:${picassoVersion}"
 
     testImplementation 'junit:junit:4.12'
+
+    testCompile "org.robolectric:robolectric:${robolectricVersion}"
+    testCompile "org.mockito:mockito-core:${mockitoVersion}"
+    androidTestCompile "org.mockito:mockito-android:${mockitoVersion}"
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
