@@ -9,6 +9,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.shadows.ShadowToast
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 
 @RunWith(RobolectricTestRunner::class)
@@ -67,7 +68,7 @@ class UsersViewTest {
 
         view.updateUser(dummyUser)
 
-        fail("need method to verify user is updated")
+//        TODO: can we verify the user was updated in teh UI with what we have now?
     }
 
     @Test
@@ -82,15 +83,13 @@ class UsersViewTest {
     @Test
     fun testShowErrorMessage() {
         view.showErrorMessage()
-
-        fail("not implemented")
+        assertTrue(ShadowToast.showedToast("An error occurred."))
     }
 
     @Test
     fun testShowUserView() {
         view.showUserView(dummyUser)
-        
-        fail("not implemented")
+        assertTrue(ShadowToast.showedToast("Tapped " + dummyUser.username + "."))
     }
 
 }
