@@ -24,35 +24,33 @@ class UsersPresenterTest {
     @Mock private lateinit var view: UsersContract.View
     @Mock private lateinit var userRepo: UserRepository
 
+    private val dummyUser = User(0, "", "", "")
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        val user = User(1, "", "", "")
         whenever(userRepo.getUsers(0))
-                .thenReturn(Single.just(arrayListOf(user)))
+                .thenReturn(Single.just(arrayListOf(dummyUser)))
         presenter = UsersPresenter(view, userRepo)
         presenter.initialize()
     }
 
     @Test
     fun testUserClicked() {
-        val user = User(1, "", "", "")
-        presenter.onUserClicked(user)
-        verify(view).showUserView(user)
+        presenter.onUserClicked(dummyUser)
+        verify(view).showUserView(dummyUser)
     }
 
     @Test
     fun testUserRemoved() {
-        val user = User(1, "", "", "")
-        presenter.onUserRemoved(user)
-        verify(view).removeUser(user)
+        presenter.onUserRemoved(dummyUser)
+        verify(view).removeUser(dummyUser)
     }
 
     @Test
     fun testOnNextPage() {
-        val user = User(1, "", "", "")
         presenter.onNextPage()
-        verify(view).addUsers(arrayListOf(user))
+        verify(view).addUsers(arrayListOf(dummyUser))
     }
 
 }
