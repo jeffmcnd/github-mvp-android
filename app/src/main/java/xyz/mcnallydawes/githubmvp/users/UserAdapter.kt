@@ -46,7 +46,7 @@ class UserAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (users.size == 0) 0 else users.size + 1
+        return users.size + 1
     }
 
     fun addUser(user: User) {
