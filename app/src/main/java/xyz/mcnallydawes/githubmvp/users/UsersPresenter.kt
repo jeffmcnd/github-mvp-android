@@ -19,7 +19,7 @@ class UsersPresenter(
     }
 
     override fun initialize() {
-        view.setupUsersList()
+        view.setupUserList()
     }
 
     override fun onUserClicked(user: User) {

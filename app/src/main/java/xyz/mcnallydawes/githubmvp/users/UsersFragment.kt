@@ -39,7 +39,7 @@ class UsersFragment: Fragment(), UsersContract.View {
         presenter?.initialize()
     }
 
-    override fun setupUsersList() {
+    override fun setupUserList() {
         recyclerView.layoutManager = LinearLayoutManager(
                 activity, LinearLayoutManager.VERTICAL, false)
         adapter = UserAdapter(ArrayList(), object : UserClickListener {

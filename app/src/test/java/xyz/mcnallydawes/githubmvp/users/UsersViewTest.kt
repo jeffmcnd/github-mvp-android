@@ -29,8 +29,8 @@ class UsersViewTest {
     }
 
     @Test
-    fun testSetupUsersList() {
-        view.setupUsersList()
+    fun testSetupUserList() {
+        view.setupUserList()
         assertNotNull(view.recyclerView.layoutManager)
         assertNotNull(view.recyclerView.adapter)
     }

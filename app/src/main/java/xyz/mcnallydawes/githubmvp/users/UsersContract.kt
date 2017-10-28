@@ -8,7 +8,7 @@ interface UsersContract {
 
         fun setPresenter(presenter: UsersContract.Presenter)
 
-        fun setupUsersList()
+        fun setupUserList()
 
         fun addUser(user: User)
 
