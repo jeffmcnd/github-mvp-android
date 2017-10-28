@@ -7,5 +7,6 @@
     <color name="colorAccentLight">#ffb2ff</color>
     <color name="colorAccentDark">#b64fc8</color>
     <color name="colorBackground">#f5f5f5</color>
-    <color name="colorText">#616161</color>
+    <color name="colorText">#424242</color>
+    <color name="colorUserDivider">#e0e0e0</color>
 </resources>
