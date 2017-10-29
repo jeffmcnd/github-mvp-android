@@ -4,7 +4,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
-import java.util.concurrent.TimeUnit
 
 class UsersPresenter(
         private val view: UsersContract.View,
@@ -37,7 +36,6 @@ class UsersPresenter(
 
         loading = true
         userRepo.getUsers(lastUserId)
-                .delay(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
