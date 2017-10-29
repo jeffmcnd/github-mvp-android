@@ -49,6 +49,10 @@ class UserAdapter(
         return users.size + 1
     }
 
+    fun getUser(position: Int) : User {
+        return users[position]
+    }
+
     fun addUser(user: User) {
         users.add(user)
         notifyItemInserted(itemCount - 1)

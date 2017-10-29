@@ -68,7 +68,7 @@ class UsersViewTest {
 
         view.updateUser(dummyUser)
 
-//        TODO: can we verify the user was updated in teh UI with what we have now?
+        assertTrue((view.recyclerView.adapter as UserAdapter).getUser(0) == dummyUser)
     }
 
     @Test
