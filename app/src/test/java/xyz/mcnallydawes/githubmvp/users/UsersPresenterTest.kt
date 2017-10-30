@@ -24,15 +24,29 @@ class UsersPresenterTest {
     @Mock private lateinit var view: UsersContract.View
     @Mock private lateinit var userRepo: UserRepository
 
-    private val dummyUser = User(0, "", "", "")
+    private val dummyUser = User(1, "", "", "")
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        whenever(userRepo.getUsers(0))
-                .thenReturn(Single.just(arrayListOf(dummyUser)))
+        whenever(userRepo.getUsers(0)).thenReturn(Single.just(arrayListOf(dummyUser)))
         presenter = UsersPresenter(view, userRepo)
+    }
+
+    @Test
+    fun testConstructor() {
+        verify(view).setPresenter(presenter)
+    }
+
+    @Test
+    fun testInitialize() {
         presenter.initialize()
+        verify(view).setupUserList()
+    }
+
+    @Test
+    fun testTerminate() {
+        presenter.terminate()
     }
 
     @Test
