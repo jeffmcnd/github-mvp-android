@@ -34,21 +34,18 @@ class UsersPresenter(
     }
 
     override fun onNextPage() {
-        if (loading) {
-            return
-        }
+        if (loading) return
 
         loading = true
         userRepo.getUsers(lastUserId)
+                .doOnSubscribe({ loading = false })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     lastUserId = it.last().id
                     view.addUsers(it)
-                    loading = false
                 }, {
                     view.showErrorMessage()
-                    loading = false
                 })
                 .addTo(disposables)
     }
