@@ -44,7 +44,7 @@ class UsersFragment: Fragment(), UsersContract.View {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
-        val firstVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
         outState?.putInt("recyclerViewPosition", firstVisibleItemPosition)
     }
 

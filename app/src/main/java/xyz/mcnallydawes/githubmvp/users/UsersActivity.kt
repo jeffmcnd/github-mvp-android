@@ -3,7 +3,7 @@ package xyz.mcnallydawes.githubmvp.users
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import xyz.mcnallydawes.githubmvp.R
-import xyz.mcnallydawes.githubmvp.di.Injection
+import xyz.mcnallydawes.githubmvp.di.RepoInjection
 
 class UsersActivity : AppCompatActivity() {
 
@@ -18,7 +18,7 @@ class UsersActivity : AppCompatActivity() {
             transaction.commit()
         }
 
-        UsersPresenter(fragment, Injection.provideUserRepo(this))
+        UsersPresenter(fragment, RepoInjection.provideUserRepo(this))
 
         supportActionBar?.title = "Github Users"
     }

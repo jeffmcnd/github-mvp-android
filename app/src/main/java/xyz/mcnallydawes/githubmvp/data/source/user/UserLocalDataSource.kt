@@ -6,16 +6,7 @@ import io.reactivex.Single
 import io.realm.Realm
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 
-class UserLocalDataSource private constructor(): UserDataSource {
-
-    companion object {
-        private var INSTANCE: UserLocalDataSource? = null
-
-        @JvmStatic fun getInstance(): UserLocalDataSource =
-                INSTANCE ?: UserLocalDataSource().apply{ INSTANCE = this }
-
-        @JvmStatic fun destroyInstance() { INSTANCE = null }
-    }
+object UserLocalDataSource : UserDataSource {
 
     override fun getUsers(lastUserId: Int) : Single<ArrayList<User>> {
         return Single.create {
