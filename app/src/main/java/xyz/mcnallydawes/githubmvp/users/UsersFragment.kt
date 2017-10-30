@@ -37,7 +37,15 @@ class UsersFragment: Fragment(), UsersContract.View {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter?.initialize()
+        val position = savedInstanceState?.getInt("recyclerViewPosition") ?: -1
+        presenter?.initialize(position)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
+        val firstVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+        outState?.putInt("recyclerViewPosition", firstVisibleItemPosition)
     }
 
     override fun onDestroy() {
@@ -90,6 +98,28 @@ class UsersFragment: Fragment(), UsersContract.View {
 
     override fun showUserView(user: User) {
         Toast.makeText(activity, "Tapped " + user.username + ".", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun scrollToPosition(position: Int) {
+        recyclerView.measure(
+                View.MeasureSpec.makeMeasureSpec(recyclerView.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(recyclerView.height, View.MeasureSpec.EXACTLY)
+        )
+
+        val itemView = recyclerView.getChildAt(0)
+        itemView.measure(
+                View.MeasureSpec.makeMeasureSpec(itemView.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(itemView.height, View.MeasureSpec.EXACTLY)
+        )
+
+        val numVisibleItems = recyclerView.height / itemView.height
+        val indexOffset =  numVisibleItems - 1
+        val completelyVisibleItemsHeight = numVisibleItems * itemView.measuredHeight
+        val pixelOffset = Math.abs(completelyVisibleItemsHeight - recyclerView.measuredHeight)
+
+        val index = position + indexOffset
+        recyclerView.scrollToPosition(index)
+        recyclerView.scrollBy(0, pixelOffset)
     }
 
 }

@@ -22,11 +22,13 @@ interface UsersContract {
 
         fun showUserView(user: User)
 
+        fun scrollToPosition(position: Int)
+
     }
 
     interface Presenter {
 
-        fun initialize()
+        fun initialize(savedScrollPosition: Int)
 
         fun terminate()
 

@@ -40,7 +40,7 @@ class UsersPresenterTest {
 
     @Test
     fun testInitialize() {
-        presenter.initialize()
+        presenter.initialize(0)
         verify(view).setupUserList()
     }
 

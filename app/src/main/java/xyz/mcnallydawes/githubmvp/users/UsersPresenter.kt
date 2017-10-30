@@ -15,12 +15,14 @@ class UsersPresenter(
     private var lastUserId = 0
     private var loading = false
     private val disposables = CompositeDisposable()
+    private var savedScrollPosition = -1
 
     init {
         view.setPresenter(this)
     }
 
-    override fun initialize() {
+    override fun initialize(savedScrollPosition: Int) {
+        this.savedScrollPosition = savedScrollPosition
         view.setupUserList()
     }
 
@@ -48,6 +50,11 @@ class UsersPresenter(
                 .subscribe({
                     lastUserId = it.last().id
                     view.addUsers(it)
+
+                    if (savedScrollPosition >= 0) {
+                        view.scrollToPosition(savedScrollPosition)
+                        savedScrollPosition = -1
+                    }
                 }, {
                     view.showErrorMessage()
                 })
