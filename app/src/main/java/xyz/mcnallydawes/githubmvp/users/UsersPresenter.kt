@@ -1,6 +1,8 @@
 package xyz.mcnallydawes.githubmvp.users
 
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
@@ -12,13 +14,15 @@ class UsersPresenter(
 
     private var lastUserId = 0
     private var loading = false
-
-    init {
-        view.setPresenter(this)
-    }
+    private val disposables = CompositeDisposable()
 
     override fun initialize() {
         view.setupUserList()
+    }
+
+    override fun terminate() {
+        disposables.clear()
+        disposables.dispose()
     }
 
     override fun onUserClicked(user: User) {
@@ -39,13 +43,14 @@ class UsersPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    lastUserId = it[it.size - 1].id
+                    lastUserId = it.last().id
                     view.addUsers(it)
                     loading = false
                 }, {
                     view.showErrorMessage()
                     loading = false
                 })
+                .addTo(disposables)
     }
 
 }

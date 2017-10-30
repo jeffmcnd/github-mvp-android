@@ -28,6 +28,8 @@ interface UsersContract {
 
         fun initialize()
 
+        fun terminate()
+
         fun onUserClicked(user: User)
 
         fun onUserRemoved(user: User)

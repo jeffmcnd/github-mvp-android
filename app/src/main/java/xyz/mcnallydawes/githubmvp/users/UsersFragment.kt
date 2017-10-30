@@ -39,6 +39,11 @@ class UsersFragment: Fragment(), UsersContract.View {
         presenter?.initialize()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.terminate()
+    }
+
     override fun setupUserList() {
         recyclerView.layoutManager = LinearLayoutManager(
                 activity, LinearLayoutManager.VERTICAL, false)
