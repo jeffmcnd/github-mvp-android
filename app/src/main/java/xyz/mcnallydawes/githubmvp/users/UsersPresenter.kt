@@ -16,6 +16,10 @@ class UsersPresenter(
     private var loading = false
     private val disposables = CompositeDisposable()
 
+    init {
+        view.setPresenter(this)
+    }
+
     override fun initialize() {
         view.setupUserList()
     }
