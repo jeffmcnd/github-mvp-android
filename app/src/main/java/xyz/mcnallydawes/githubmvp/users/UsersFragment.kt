@@ -3,18 +3,19 @@ package xyz.mcnallydawes.githubmvp.users
 import android.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import kotlinx.android.synthetic.main.fragment_users.*
 import xyz.mcnallydawes.githubmvp.R
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import java.util.concurrent.TimeUnit
 
 class UsersFragment: Fragment(), UsersContract.View {
 
-    private val VISIBLE_THRESHOLD = 5
+    private val VISIBLE_THRESHOLD = 3
 
     private var presenter: UsersContract.Presenter? = null
 
@@ -54,16 +55,17 @@ class UsersFragment: Fragment(), UsersContract.View {
         })
         recyclerView.adapter = adapter
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                if (totalItemCount <= lastVisibleItem + VISIBLE_THRESHOLD) {
+        RxRecyclerView.scrollEvents(recyclerView)
+                .filter {
+                    val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                    totalItemCount <= lastVisibleItem + VISIBLE_THRESHOLD
+                }
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .subscribe {
                     presenter?.onNextPage()
                 }
-            }
-        })
     }
 
     override fun addUser(user: User) {

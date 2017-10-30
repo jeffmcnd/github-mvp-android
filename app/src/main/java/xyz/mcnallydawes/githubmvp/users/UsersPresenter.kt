@@ -42,7 +42,7 @@ class UsersPresenter(
 
         loading = true
         userRepo.getUsers(lastUserId)
-                .doOnSubscribe({ loading = false })
+                .doFinally { loading = false }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

@@ -24,7 +24,7 @@ class UsersPresenterTest {
     @Mock private lateinit var view: UsersContract.View
     @Mock private lateinit var userRepo: UserRepository
 
-    private val dummyUser = User(1, "", "", "")
+    private val dummyUser = User()
 
     @Before
     fun setUp() {

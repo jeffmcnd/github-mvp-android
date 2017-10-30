@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.github
 
+import io.reactivex.Maybe
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,6 +13,6 @@ interface GithubApi {
     fun getUsers(@Query("since") lastUserId: Int): Single<ArrayList<User>>
 
     @GET("/users/{username}")
-    fun getUser(@Path("username") username: String): Single<User>
+    fun getUser(@Path("username") username: String): Maybe<User>
 
 }
