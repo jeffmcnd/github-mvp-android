@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.users
 
+import android.view.View
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.junit.Assert.*
 import org.junit.Before
@@ -81,6 +82,15 @@ class UsersViewTest {
     }
 
     @Test
+    fun testRemoveAllUsers() {
+        view.setupUserList()
+        view.addUsers(arrayListOf(dummyUser, dummyUser, dummyUser))
+        view.removeAllUsers()
+
+        assertEquals(1, view.recyclerView.adapter.itemCount)
+    }
+
+    @Test
     fun testShowErrorMessage() {
         view.showErrorMessage()
         assertTrue(ShadowToast.showedToast("An error occurred."))
@@ -90,6 +100,30 @@ class UsersViewTest {
     fun testShowUserView() {
         view.showUserView(dummyUser)
         assertTrue(ShadowToast.showedToast("Tapped " + dummyUser.username + "."))
+    }
+
+    @Test
+    fun testHideRefreshLayout() {
+        view.swipeRefreshLayout.isRefreshing = true
+        view.hideRefreshIndicator()
+        assertFalse(view.swipeRefreshLayout.isRefreshing)
+    }
+
+    @Test
+    fun testShowList() {
+        view.recyclerView.visibility = View.INVISIBLE
+        assertEquals(View.INVISIBLE, view.recyclerView.visibility)
+
+        view.showList()
+        assertEquals(View.VISIBLE, view.recyclerView.visibility)
+    }
+
+    @Test
+    fun testHideList() {
+        assertEquals(View.VISIBLE, view.recyclerView.visibility)
+
+        view.hideList()
+        assertEquals(View.INVISIBLE, view.recyclerView.visibility)
     }
 
 }

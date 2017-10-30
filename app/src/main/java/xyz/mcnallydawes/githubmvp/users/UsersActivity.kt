@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import xyz.mcnallydawes.githubmvp.R
 import xyz.mcnallydawes.githubmvp.di.RepoInjection
+import xyz.mcnallydawes.githubmvp.utils.InjectionUtils
 
 class UsersActivity : AppCompatActivity() {
 
@@ -18,7 +19,8 @@ class UsersActivity : AppCompatActivity() {
             transaction.commit()
         }
 
-        UsersPresenter(fragment, RepoInjection.provideUserRepo(this))
+        val userRepo = RepoInjection.provideUserRepo(InjectionUtils.getGithubApi(this))
+        UsersPresenter(fragment, userRepo)
 
         supportActionBar?.title = "Github Users"
     }

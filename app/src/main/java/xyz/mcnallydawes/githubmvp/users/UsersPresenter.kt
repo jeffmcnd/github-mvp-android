@@ -44,9 +44,13 @@ class UsersPresenter(
 
         loading = true
         userRepo.getUsers(lastUserId)
-                .doFinally { loading = false }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally {
+                    loading = false
+                    view.showList()
+                    view.hideRefreshIndicator()
+                }
                 .subscribe({
                     lastUserId = it.last().id
                     view.addUsers(it)
@@ -55,6 +59,20 @@ class UsersPresenter(
                         view.scrollToPosition(savedScrollPosition)
                         savedScrollPosition = -1
                     }
+                }, {
+                    view.showErrorMessage()
+                })
+                .addTo(disposables)
+    }
+
+    override fun onRefreshList() {
+        view.hideList()
+        userRepo.removeAllUsers()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    lastUserId = 0
+                    view.removeAllUsers()
                 }, {
                     view.showErrorMessage()
                 })

@@ -54,6 +54,10 @@ class UsersFragment: Fragment(), UsersContract.View {
     }
 
     override fun setupUserList() {
+        swipeRefreshLayout.setOnRefreshListener {
+            presenter?.onRefreshList()
+        }
+
         recyclerView.layoutManager = LinearLayoutManager(
                 activity, LinearLayoutManager.VERTICAL, false)
         adapter = UserAdapter(ArrayList(), object : UserClickListener {
@@ -92,6 +96,10 @@ class UsersFragment: Fragment(), UsersContract.View {
         adapter?.removeUser(user)
     }
 
+    override fun removeAllUsers() {
+        adapter?.removeAllUsers()
+    }
+
     override fun showErrorMessage() {
         Toast.makeText(activity, "An error occurred.", Toast.LENGTH_SHORT).show()
     }
@@ -122,4 +130,15 @@ class UsersFragment: Fragment(), UsersContract.View {
         recyclerView.scrollBy(0, pixelOffset)
     }
 
+    override fun hideRefreshIndicator() {
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun showList() {
+        recyclerView.visibility = View.VISIBLE
+    }
+
+    override fun hideList() {
+        recyclerView.visibility = View.INVISIBLE
+    }
 }

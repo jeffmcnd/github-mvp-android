@@ -18,11 +18,19 @@ interface UsersContract {
 
         fun removeUser(user: User)
 
+        fun removeAllUsers()
+
         fun showErrorMessage()
 
         fun showUserView(user: User)
 
         fun scrollToPosition(position: Int)
+
+        fun hideRefreshIndicator()
+
+        fun showList()
+
+        fun hideList()
 
     }
 
@@ -37,6 +45,8 @@ interface UsersContract {
         fun onUserRemoved(user: User)
 
         fun onNextPage()
+
+        fun onRefreshList()
 
     }
 

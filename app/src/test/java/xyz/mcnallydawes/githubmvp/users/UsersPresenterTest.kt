@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.users
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.ClassRule
@@ -30,6 +31,7 @@ class UsersPresenterTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         whenever(userRepo.getUsers(0)).thenReturn(Single.just(arrayListOf(dummyUser)))
+        whenever(userRepo.removeAllUsers()).thenReturn(Completable.complete())
         presenter = UsersPresenter(view, userRepo)
     }
 
@@ -65,6 +67,13 @@ class UsersPresenterTest {
     fun testOnNextPage() {
         presenter.onNextPage()
         verify(view).addUsers(arrayListOf(dummyUser))
+    }
+
+    @Test
+    fun testOnRefreshList() {
+        presenter.onRefreshList()
+        verify(view).hideList()
+        verify(view).removeAllUsers()
     }
 
 }
