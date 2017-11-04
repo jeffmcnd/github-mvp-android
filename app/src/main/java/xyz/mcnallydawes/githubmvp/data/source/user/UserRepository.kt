@@ -4,27 +4,14 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import javax.inject.Inject
+import javax.inject.Singleton
 
-open class UserRepository(
+@Singleton
+open class UserRepository @Inject constructor(
         private val localDataSource: UserDataSource,
         private val remoteDataSource: UserDataSource
 ): UserDataSource {
-
-    companion object {
-        private var INSTANCE: UserRepository? = null
-
-        @JvmStatic
-        fun getInstance(
-                localDataSource: UserLocalDataSource,
-                remoteDataSource: UserRemoteDataSource
-        ): UserRepository =
-                INSTANCE ?: UserRepository(localDataSource, remoteDataSource).apply { INSTANCE = this }
-
-        @JvmStatic
-        fun destroyInstance() {
-            INSTANCE = null
-        }
-    }
 
     override fun getUsers(lastUserId: Int): Single<ArrayList<User>> {
         return localDataSource.getUsers(lastUserId)
