@@ -11,16 +11,19 @@ import javax.inject.Singleton
 @Singleton
 class UserRemoteDataSource @Inject constructor(private val githubApi: GithubApi) : UserDataSource {
 
-    override fun getUsers(lastUserId: Int): Single<ArrayList<User>> = githubApi.getUsers(lastUserId)
+    override fun getAllUsers(lastUserId: Int): Single<ArrayList<User>> = githubApi.getUsers(lastUserId)
 
-    override fun getUser(username: String): Maybe<User> = githubApi.getUser(username)
+    override fun getAll(): Single<ArrayList<User>> = Single.error(Throwable("not implemented"))
 
-    override fun saveUsers(users: ArrayList<User>): Single<ArrayList<User>> =
+    override fun get(id: Int): Maybe<User> = githubApi.getUser(id)
+
+    override fun saveAll(objects: ArrayList<User>): Single<ArrayList<User>> =
             Single.error(Throwable("not implemented"))
 
-    override fun saveUser(user: User): Single<User> = Single.error(Throwable("not implemented"))
+    override fun save(obj: User): Single<User> = Single.error(Throwable("not implemented"))
 
-    override fun removeUser(id: Int): Completable = Completable.error(Throwable("not implemented"))
+    override fun remove(id: Int): Completable = Completable.error(Throwable("not implemented"))
 
-    override fun removeAllUsers(): Completable = Completable.error(Throwable("not implemented"))
+    override fun removeAll(): Completable = Completable.error(Throwable("not implemented"))
+
 }
