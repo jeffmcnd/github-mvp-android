@@ -40,13 +40,4 @@
         tools:text="Jeffrey McNally-Dawes"
         />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        app:layout_constraintStart_toStartOf="@id/usernameTv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorUserDivider"
-        />
-
 </android.support.constraint.ConstraintLayout>
