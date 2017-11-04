@@ -43,7 +43,7 @@ class UsersPresenter(
         if (loading) return
 
         loading = true
-        userRepo.getUsers(lastUserId)
+        userRepo.getAllUsers(lastUserId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally {
@@ -67,7 +67,7 @@ class UsersPresenter(
 
     override fun onRefreshList() {
         view.hideList()
-        userRepo.removeAllUsers()
+        userRepo.removeAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

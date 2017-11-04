@@ -13,30 +13,33 @@ open class UserRepository @Inject constructor(
         private val remoteDataSource: UserDataSource
 ): UserDataSource {
 
-    override fun getUsers(lastUserId: Int): Single<ArrayList<User>> {
-        return localDataSource.getUsers(lastUserId)
+
+    override fun getAll(): Single<ArrayList<User>> {
+        return localDataSource.getAll()
+    }
+
+    override fun getAllUsers(lastUserId: Int): Single<ArrayList<User>> {
+        return localDataSource.getAllUsers(lastUserId)
                 .flatMap {
                     if (it.isEmpty()) {
-                        remoteDataSource.getUsers(lastUserId)
-                                .flatMap { localDataSource.saveUsers(it) }
+                        remoteDataSource.getAllUsers(lastUserId)
+                                .flatMap { localDataSource.saveAll(it) }
                     }
                     else Single.just(it)
                 }
     }
 
-    override fun getUser(username: String): Maybe<User> {
-        return remoteDataSource.getUser(username)
+    override fun get(id: Int): Maybe<User> = remoteDataSource.get(id)
+
+    override fun saveAll(objects: ArrayList<User>): Single<ArrayList<User>> {
+        return localDataSource.saveAll(objects)
     }
 
-    override fun saveUsers(users: ArrayList<User>): Single<ArrayList<User>> {
-        return localDataSource.saveUsers(users)
+    override fun save(obj: User): Single<User> {
+        return localDataSource.save(obj).flatMap { remoteDataSource.save(obj) }
     }
 
-    override fun saveUser(user: User): Single<User> {
-        return localDataSource.saveUser(user)
-    }
+    override fun remove(id: Int): Completable = localDataSource.remove(id)
 
-    override fun removeUser(id: Int): Completable = localDataSource.removeUser(id)
-
-    override fun removeAllUsers(): Completable = localDataSource.removeAllUsers()
+    override fun removeAll(): Completable = localDataSource.removeAll()
 }

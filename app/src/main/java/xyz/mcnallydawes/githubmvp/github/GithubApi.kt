@@ -12,7 +12,7 @@ interface GithubApi {
     @GET("/users")
     fun getUsers(@Query("since") lastUserId: Int): Single<ArrayList<User>>
 
-    @GET("/users/{username}")
-    fun getUser(@Path("username") username: String): Maybe<User>
+    @GET("/users/{id}")
+    fun getUser(@Path("id") username: Int): Maybe<User>
 
 }
