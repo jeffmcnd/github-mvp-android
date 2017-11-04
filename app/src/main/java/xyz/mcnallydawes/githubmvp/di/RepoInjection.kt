@@ -1,20 +1,19 @@
 package xyz.mcnallydawes.githubmvp.di
 
-import android.content.Context
+import dagger.Module
+import dagger.Provides
 import xyz.mcnallydawes.githubmvp.data.source.user.UserLocalDataSource
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRemoteDataSource
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
 import xyz.mcnallydawes.githubmvp.github.GithubApi
-import xyz.mcnallydawes.githubmvp.utils.InjectionUtils
+import javax.inject.Singleton
 
+@Module
 object RepoInjection {
 
+    @Provides @Singleton
     fun provideUserRepo(githubApi: GithubApi): UserRepository {
-        checkNotNull(githubApi)
-        return UserRepository.getInstance(
-                UserLocalDataSource,
-                UserRemoteDataSource.getInstance(githubApi)
-        )
+        return UserRepository(UserLocalDataSource(), UserRemoteDataSource(githubApi))
     }
 
 }

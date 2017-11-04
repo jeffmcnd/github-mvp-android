@@ -15,7 +15,7 @@ class UserLocalDataSourceTest {
 
     @Before
     fun setup() {
-        localDataSource = UserLocalDataSource
+        localDataSource = UserLocalDataSource()
     }
 
     @After

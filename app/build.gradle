@@ -27,6 +27,7 @@ android {
     productFlavors {
         prod {
             resValue "string", "api_domain", "https://api.github.com"
+            buildConfigField("String", "API_DOMAIN", "\"https://api.github.com\"")
         }
     }
 
@@ -65,6 +66,9 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${picassoVersion}"
 
     implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${rxBindingVersion}"
+
+    implementation 'com.google.dagger:dagger:2.9'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"

@@ -5,8 +5,10 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.realm.Realm
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import javax.inject.Singleton
 
-object UserLocalDataSource : UserDataSource {
+@Singleton
+class UserLocalDataSource : UserDataSource {
 
     override fun getUsers(lastUserId: Int) : Single<ArrayList<User>> {
         return Single.create {
