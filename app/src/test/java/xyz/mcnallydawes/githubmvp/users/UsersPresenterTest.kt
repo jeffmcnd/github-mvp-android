@@ -30,8 +30,8 @@ class UsersPresenterTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        whenever(userRepo.getUsers(0)).thenReturn(Single.just(arrayListOf(dummyUser)))
-        whenever(userRepo.removeAllUsers()).thenReturn(Completable.complete())
+        whenever(userRepo.getAllUsers(0)).thenReturn(Single.just(arrayListOf(dummyUser)))
+        whenever(userRepo.removeAll()).thenReturn(Completable.complete())
         presenter = UsersPresenter(view, userRepo)
     }
 

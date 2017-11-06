@@ -56,7 +56,7 @@ class UserLocalDataSourceTest {
         val users = arrayListOf(User(id = 1), User(id = 2), User(id = 3))
 
         with (localDataSource) {
-            var saveObserver = saveAll(users).test()
+            val saveObserver = saveAll(users).test()
             saveObserver.awaitTerminalEvent()
 
             val getObserver = getAllUsers(users[0].id - 1).test()

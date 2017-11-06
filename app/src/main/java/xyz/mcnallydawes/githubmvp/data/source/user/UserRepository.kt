@@ -2,7 +2,10 @@ package xyz.mcnallydawes.githubmvp.data.source.user
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.toMaybe
+import io.reactivex.rxkotlin.toSingle
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,14 +32,23 @@ open class UserRepository @Inject constructor(
                 }
     }
 
-    override fun get(id: Int): Maybe<User> = remoteDataSource.get(id)
+    override fun get(id: Int): Observable<User> {
+        return remoteDataSource.get(id)
+                .flatMap { localDataSource.save(it) }
+                .publish { network ->
+                    Observable.merge(
+                            network,
+                            localDataSource.get(id).takeUntil(network)
+                    )
+                }
+    }
 
     override fun saveAll(objects: ArrayList<User>): Single<ArrayList<User>> {
         return localDataSource.saveAll(objects)
     }
 
-    override fun save(obj: User): Single<User> {
-        return localDataSource.save(obj).flatMap { remoteDataSource.save(obj) }
+    override fun save(obj: User): Observable<User> {
+        return localDataSource.save(obj)
     }
 
     override fun remove(id: Int): Completable = localDataSource.remove(id)

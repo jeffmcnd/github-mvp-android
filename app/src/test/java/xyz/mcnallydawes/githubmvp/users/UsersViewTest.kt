@@ -12,6 +12,11 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowToast
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import org.robolectric.shadows.ShadowApplication
+import android.content.Intent
+import xyz.mcnallydawes.githubmvp.Constants
+import xyz.mcnallydawes.githubmvp.userdetail.UserDetailActivity
+
 
 @RunWith(RobolectricTestRunner::class)
 class UsersViewTest {
@@ -99,7 +104,12 @@ class UsersViewTest {
     @Test
     fun testShowUserView() {
         view.showUserView(dummyUser)
-        assertTrue(ShadowToast.showedToast("Tapped " + dummyUser.username + "."))
+
+        val expectedIntent = Intent(view.activity, UserDetailActivity::class.java)
+        expectedIntent.putExtra(Constants.EXTRA_USER_ID, dummyUser.id)
+        val actual = ShadowApplication.getInstance().nextStartedActivity
+
+        assertEquals(expectedIntent.component, actual.component)
     }
 
     @Test
