@@ -2,22 +2,16 @@ package xyz.mcnallydawes.githubmvp.data.source.user
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.Realm
-import xyz.mcnallydawes.githubmvp.data.model.local.User
+import xyz.mcnallydawes.githubmvp.data.model.local.*
+import javax.inject.Singleton
 
-class UserLocalDataSource private constructor(): UserDataSource {
+@Singleton
+class UserLocalDataSource : UserDataSource {
 
-    companion object {
-        private var INSTANCE: UserLocalDataSource? = null
-
-        @JvmStatic fun getInstance(): UserLocalDataSource =
-                INSTANCE ?: UserLocalDataSource().apply{ INSTANCE = this }
-
-        @JvmStatic fun destroyInstance() { INSTANCE = null }
-    }
-
-    override fun getUsers(lastUserId: Int) : Single<ArrayList<User>> {
+    override fun getAllUsers(lastUserId: Int): Single<ArrayList<User>> {
         return Single.create {
             val users = ArrayList<User>()
             val realm = Realm.getDefaultInstance()
@@ -31,61 +25,25 @@ class UserLocalDataSource private constructor(): UserDataSource {
         }
     }
 
-    override fun getUser(username: String) : Maybe<User> {
-        return Maybe.create {
-            val realm = Realm.getDefaultInstance()
-            var user: User? = null
-            val userResult = realm.where(User::class.java).equalTo("username", username).findFirst()
-            if (userResult != null) user = realm.copyFromRealm(userResult)
-            realm.close()
-            if (user != null) it.onSuccess(user)
-            else it.onComplete()
-        }
-    }
-
-    override fun saveUsers(users: ArrayList<User>) : Single<ArrayList<User>> {
+    override fun getAll() : Single<ArrayList<User>> {
         return Single.create {
+            val users = ArrayList<User>()
             val realm = Realm.getDefaultInstance()
-            realm.executeTransaction {
-                it.copyToRealmOrUpdate(users)
-            }
+            val results = realm.where(User::class.java).findAll().sort("id")
+            if (results != null) users.addAll(realm.copyFromRealm(results))
             realm.close()
             it.onSuccess(users)
         }
     }
 
-    override fun saveUser(user: User) : Single<User> {
-        return Single.create {
-            val realm = Realm.getDefaultInstance()
-            realm.executeTransaction {
-                it.copyToRealmOrUpdate(user)
-            }
-            realm.close()
-            it.onSuccess(user)
-        }
-    }
+    override fun get(id: Int) : Observable<User> = User().get(id)
 
-    override fun removeUser(id: Int): Completable {
-        return Completable.create {
-            val realm = Realm.getDefaultInstance()
-            val user = realm.where(User::class.java).equalTo("id", id).findFirst()
-            realm.executeTransaction {
-                user?.deleteFromRealm()
-            }
-            realm.close()
-            it.onComplete()
-        }
-    }
+    override fun saveAll(objects: ArrayList<User>) : Single<ArrayList<User>> = User().saveAll(objects)
 
-    override fun removeAllUsers(): Completable {
-        return Completable.create {
-            val realm = Realm.getDefaultInstance()
-            val users = realm.where(User::class.java).findAll()
-            realm.executeTransaction {
-                users.deleteAllFromRealm()
-            }
-            realm.close()
-            it.onComplete()
-        }
-    }
+    override fun save(obj: User) : Observable<User> = obj.save()
+
+    override fun remove(id: Int): Completable = User().delete(id)
+
+    override fun removeAll(): Completable = User().deleteAll()
+
 }

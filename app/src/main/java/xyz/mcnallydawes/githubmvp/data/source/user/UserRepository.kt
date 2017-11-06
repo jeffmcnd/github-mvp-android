@@ -2,54 +2,56 @@ package xyz.mcnallydawes.githubmvp.data.source.user
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.toMaybe
+import io.reactivex.rxkotlin.toSingle
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import javax.inject.Inject
+import javax.inject.Singleton
 
-open class UserRepository(
+@Singleton
+open class UserRepository @Inject constructor(
         private val localDataSource: UserDataSource,
         private val remoteDataSource: UserDataSource
 ): UserDataSource {
 
-    companion object {
-        private var INSTANCE: UserRepository? = null
 
-        @JvmStatic
-        fun getInstance(
-                localDataSource: UserLocalDataSource,
-                remoteDataSource: UserRemoteDataSource
-        ): UserRepository =
-                INSTANCE ?: UserRepository(localDataSource, remoteDataSource).apply { INSTANCE = this }
-
-        @JvmStatic
-        fun destroyInstance() {
-            INSTANCE = null
-        }
+    override fun getAll(): Single<ArrayList<User>> {
+        return localDataSource.getAll()
     }
 
-    override fun getUsers(lastUserId: Int): Single<ArrayList<User>> {
-        return localDataSource.getUsers(lastUserId)
+    override fun getAllUsers(lastUserId: Int): Single<ArrayList<User>> {
+        return localDataSource.getAllUsers(lastUserId)
                 .flatMap {
                     if (it.isEmpty()) {
-                        remoteDataSource.getUsers(lastUserId)
-                                .flatMap { localDataSource.saveUsers(it) }
+                        remoteDataSource.getAllUsers(lastUserId)
+                                .flatMap { localDataSource.saveAll(it) }
                     }
                     else Single.just(it)
                 }
     }
 
-    override fun getUser(username: String): Maybe<User> {
-        return remoteDataSource.getUser(username)
+    override fun get(id: Int): Observable<User> {
+        return remoteDataSource.get(id)
+                .flatMap { localDataSource.save(it) }
+                .publish { network ->
+                    Observable.merge(
+                            network,
+                            localDataSource.get(id).takeUntil(network)
+                    )
+                }
     }
 
-    override fun saveUsers(users: ArrayList<User>): Single<ArrayList<User>> {
-        return localDataSource.saveUsers(users)
+    override fun saveAll(objects: ArrayList<User>): Single<ArrayList<User>> {
+        return localDataSource.saveAll(objects)
     }
 
-    override fun saveUser(user: User): Single<User> {
-        return localDataSource.saveUser(user)
+    override fun save(obj: User): Observable<User> {
+        return localDataSource.save(obj)
     }
 
-    override fun removeUser(id: Int): Completable = localDataSource.removeUser(id)
+    override fun remove(id: Int): Completable = localDataSource.remove(id)
 
-    override fun removeAllUsers(): Completable = localDataSource.removeAllUsers()
+    override fun removeAll(): Completable = localDataSource.removeAll()
 }

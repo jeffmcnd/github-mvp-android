@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.users
 
+import android.view.View
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.junit.Assert.*
 import org.junit.Before
@@ -11,6 +12,11 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowToast
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import org.robolectric.shadows.ShadowApplication
+import android.content.Intent
+import xyz.mcnallydawes.githubmvp.Constants
+import xyz.mcnallydawes.githubmvp.userdetail.UserDetailActivity
+
 
 @RunWith(RobolectricTestRunner::class)
 class UsersViewTest {
@@ -81,6 +87,15 @@ class UsersViewTest {
     }
 
     @Test
+    fun testRemoveAllUsers() {
+        view.setupUserList()
+        view.addUsers(arrayListOf(dummyUser, dummyUser, dummyUser))
+        view.removeAllUsers()
+
+        assertEquals(1, view.recyclerView.adapter.itemCount)
+    }
+
+    @Test
     fun testShowErrorMessage() {
         view.showErrorMessage()
         assertTrue(ShadowToast.showedToast("An error occurred."))
@@ -89,7 +104,36 @@ class UsersViewTest {
     @Test
     fun testShowUserView() {
         view.showUserView(dummyUser)
-        assertTrue(ShadowToast.showedToast("Tapped " + dummyUser.username + "."))
+
+        val expectedIntent = Intent(view.activity, UserDetailActivity::class.java)
+        expectedIntent.putExtra(Constants.EXTRA_USER_ID, dummyUser.id)
+        val actual = ShadowApplication.getInstance().nextStartedActivity
+
+        assertEquals(expectedIntent.component, actual.component)
+    }
+
+    @Test
+    fun testHideRefreshLayout() {
+        view.swipeRefreshLayout.isRefreshing = true
+        view.hideRefreshIndicator()
+        assertFalse(view.swipeRefreshLayout.isRefreshing)
+    }
+
+    @Test
+    fun testShowList() {
+        view.recyclerView.visibility = View.INVISIBLE
+        assertEquals(View.INVISIBLE, view.recyclerView.visibility)
+
+        view.showList()
+        assertEquals(View.VISIBLE, view.recyclerView.visibility)
+    }
+
+    @Test
+    fun testHideList() {
+        assertEquals(View.VISIBLE, view.recyclerView.visibility)
+
+        view.hideList()
+        assertEquals(View.INVISIBLE, view.recyclerView.visibility)
     }
 
 }

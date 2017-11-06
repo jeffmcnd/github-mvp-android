@@ -79,4 +79,9 @@ class UserAdapter(
         }
     }
 
+    fun removeAllUsers() {
+        users.clear()
+        notifyDataSetChanged()
+    }
+
 }

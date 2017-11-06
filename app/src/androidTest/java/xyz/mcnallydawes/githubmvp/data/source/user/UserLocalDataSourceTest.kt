@@ -1,6 +1,9 @@
 package xyz.mcnallydawes.githubmvp.data.source.user
 
 import android.support.test.runner.AndroidJUnit4
+import io.reactivex.Single
+import io.realm.Realm
+import io.realm.RealmObject
 import junit.framework.Assert.assertNotNull
 import org.junit.After
 import org.junit.Before
@@ -11,16 +14,17 @@ import xyz.mcnallydawes.githubmvp.data.model.local.User
 @RunWith(AndroidJUnit4::class)
 class UserLocalDataSourceTest {
 
+
     private lateinit var localDataSource: UserLocalDataSource
 
     @Before
     fun setup() {
-        localDataSource = UserLocalDataSource.getInstance()
+        localDataSource = UserLocalDataSource()
     }
 
     @After
     fun tearDown() {
-        val observer = localDataSource.removeAllUsers().test()
+        val observer = localDataSource.removeAll().test()
         observer.awaitTerminalEvent()
     }
 
@@ -30,14 +34,14 @@ class UserLocalDataSourceTest {
     }
 
     @Test
-    fun testSaveUser() {
+    fun testSave() {
         val user = User()
 
         with (localDataSource) {
-            val observer = saveUser(user).test()
+            val observer = save(user).test()
             observer.awaitTerminalEvent()
 
-            val getObserver = getUser(user.username).test()
+            val getObserver = get(user.id).test()
             getObserver.awaitTerminalEvent()
             getObserver
                     .assertNoErrors()
@@ -48,14 +52,14 @@ class UserLocalDataSourceTest {
     }
 
     @Test
-    fun testSaveUsers() {
+    fun testSaveAll() {
         val users = arrayListOf(User(id = 1), User(id = 2), User(id = 3))
 
         with (localDataSource) {
-            var saveObserver = saveUsers(users).test()
+            val saveObserver = saveAll(users).test()
             saveObserver.awaitTerminalEvent()
 
-            val getObserver = getUsers(users[0].id - 1).test()
+            val getObserver = getAllUsers(users[0].id - 1).test()
             getObserver.awaitTerminalEvent()
             getObserver
                     .assertNoErrors()
@@ -78,18 +82,18 @@ class UserLocalDataSourceTest {
     }
 
     @Test
-    fun testRemoveAllUsers() {
+    fun testRemoveAll() {
         val user = User()
 
         with (localDataSource) {
-            val saveObserver = saveUser(user).test()
+            val saveObserver = save(user).test()
             saveObserver.awaitTerminalEvent()
 
-            val deleteObserver = removeAllUsers().test()
+            val deleteObserver = removeAll().test()
             deleteObserver.awaitTerminalEvent()
             deleteObserver.assertNoErrors()
 
-            val getObserver = getUsers(user.id - 1).test()
+            val getObserver = getAllUsers(user.id - 1).test()
             getObserver.awaitTerminalEvent()
             getObserver.assertNoErrors()
                     .assertValue({ users ->
@@ -99,21 +103,21 @@ class UserLocalDataSourceTest {
     }
 
     @Test
-    fun testRemoveUser() {
+    fun testRemove() {
         val user1 = User(id = 1)
         val user2 = User(id = 2)
 
         with (localDataSource) {
-            var saveObserver = saveUser(user1).test()
+            var saveObserver = save(user1).test()
             saveObserver.awaitTerminalEvent()
-            saveObserver = saveUser(user2).test()
+            saveObserver = save(user2).test()
             saveObserver.awaitTerminalEvent()
 
-            val deleteObserver = removeUser(user2.id).test()
+            val deleteObserver = remove(user2.id).test()
             deleteObserver.awaitTerminalEvent()
             deleteObserver.assertNoErrors()
 
-            val getObserver = getUsers(user1.id - 1).test()
+            val getObserver = getAllUsers(user1.id - 1).test()
             getObserver.awaitTerminalEvent()
             getObserver
                     .assertNoErrors()
