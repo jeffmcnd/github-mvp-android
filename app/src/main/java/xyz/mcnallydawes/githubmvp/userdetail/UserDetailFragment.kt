@@ -53,6 +53,10 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
         presenter?.terminate()
     }
 
+    override fun setTitle(title: String) {
+        (activity as UserDetailActivity).supportActionBar?.title = title
+    }
+
     override fun setAvatarIv(url: String) {
         Picasso.with(activity)
                 .load(url)
@@ -63,10 +67,6 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
 
     override fun setNameTv(name: String) {
         nameTv.text = name
-    }
-
-    override fun setUsernameTv(username: String) {
-        usernameTv.text = username
     }
 
     override fun setLocationTv(location: String) {
@@ -85,4 +85,11 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
+    override fun showProgressbar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressbar() {
+        progressBar.visibility = View.GONE
+    }
 }

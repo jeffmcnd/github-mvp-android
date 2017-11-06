@@ -39,12 +39,12 @@ class UserDetailPresenterTest {
 
     @Test
     fun testInitialize() {
-        whenever(userRepo.get(0)).thenReturn(Observable.just(dummyUser))
+        whenever(userRepo.get(dummyUser.id)).thenReturn(Observable.just(dummyUser))
 
-        presenter.initialize(0)
+        presenter.initialize(dummyUser.id)
+        verify(view).setTitle(dummyUser.username!!)
         verify(view).setAvatarIv(dummyUser.avatarUrl!!)
         verify(view).setNameTv(dummyUser.name!!)
-        verify(view).setUsernameTv(dummyUser.username!!)
         verify(view).setLocationTv(dummyUser.location!!)
     }
 

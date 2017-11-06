@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.userdetail
 
+import android.view.View
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import kotlinx.android.synthetic.main.fragment_user_detail.*
@@ -7,10 +8,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowToast
+import org.robolectric.util.FragmentTestUtil.startFragment
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import org.mockito.Mockito.`when` as whenever
 
@@ -26,12 +29,10 @@ class UserDetailViewTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        val fragmentController = Robolectric.buildFragment(UserDetailFragment::class.java)
+        view = UserDetailFragment()
+        startFragment(view, UserDetailActivity::class.java)
 
-        view = fragmentController.get()
         view.setPresenter(presenter)
-
-        fragmentController.create().start().resume()
     }
 
     @Test
@@ -46,9 +47,12 @@ class UserDetailViewTest {
     }
 
     @Test
-    fun testSetUsernameTv() {
-        view.setUsernameTv(dummyUser.username!!)
-        assertEquals(view.usernameTv.text.toString(), dummyUser.username)
+    fun testTitle() {
+        view.setTitle(dummyUser.username!!)
+        assertEquals(
+                dummyUser.username!!,
+                (view.activity as UserDetailActivity).supportActionBar?.title
+        )
     }
 
     @Test
@@ -72,6 +76,23 @@ class UserDetailViewTest {
     fun testShowErrorMessage() {
         view.showErrorMessage("error message")
         assertTrue(ShadowToast.showedToast("error message"))
+    }
+
+    @Test
+    fun testShowProgressbar() {
+        view.progressBar.visibility = View.GONE
+        assertEquals(view.progressBar.visibility, View.GONE)
+
+        view.showProgressbar()
+        assertEquals(view.progressBar.visibility, View.VISIBLE)
+    }
+
+    @Test
+    fun testHideProgressbar() {
+        assertEquals(view.progressBar.visibility, View.VISIBLE)
+
+        view.hideProgressbar()
+        assertEquals(view.progressBar.visibility, View.GONE)
     }
 
 }

@@ -6,11 +6,11 @@ interface UserDetailContract {
 
         fun setPresenter(presenter : Presenter)
 
+        fun setTitle(title : String)
+
         fun setAvatarIv(url : String)
 
         fun setNameTv(name : String)
-
-        fun setUsernameTv(username : String)
 
         fun setLocationTv(location : String)
 
@@ -19,6 +19,10 @@ interface UserDetailContract {
         fun showUserNotFoundError()
 
         fun showErrorMessage(message : String)
+
+        fun showProgressbar()
+
+        fun hideProgressbar()
 
     }
 

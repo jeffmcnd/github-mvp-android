@@ -18,19 +18,19 @@ class UserDetailPresenter(
     }
 
     override fun initialize(userId : Int) {
+        view.showProgressbar()
         userRepo.get(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate { view.hideProgressbar() }
                 .subscribe({
+                    if (it.username != null) view.setTitle(it.username!!)
                     if (it.avatarUrl != null) view.setAvatarIv(it.avatarUrl!!)
                     if (it.name != null) view.setNameTv(it.name!!)
-                    if (it.username != null) view.setUsernameTv(it.username!!)
                     if (it.location != null) view.setLocationTv(it.location!!)
                 }, {
                     view.showErrorMessage(it.localizedMessage)
-                }, {
-//                    TODO: All done, nothing to see here
-                }).addTo(disposables)
+                }, {}).addTo(disposables)
     }
 
     override fun terminate() {
