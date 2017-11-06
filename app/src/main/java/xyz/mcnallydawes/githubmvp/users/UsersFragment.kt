@@ -1,6 +1,7 @@
 package xyz.mcnallydawes.githubmvp.users
 
 import android.app.Fragment
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -9,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import kotlinx.android.synthetic.main.fragment_users.*
+import xyz.mcnallydawes.githubmvp.Constants
 import xyz.mcnallydawes.githubmvp.R
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import xyz.mcnallydawes.githubmvp.userdetail.UserDetailActivity
 import java.util.concurrent.TimeUnit
 
 class UsersFragment: Fragment(), UsersContract.View {
@@ -105,7 +108,9 @@ class UsersFragment: Fragment(), UsersContract.View {
     }
 
     override fun showUserView(user: User) {
-        Toast.makeText(activity, "Tapped " + user.username + ".", Toast.LENGTH_SHORT).show()
+        val intent = Intent(activity, UserDetailActivity::class.java)
+        intent.putExtra(Constants.EXTRA_USER_ID, user.id)
+        startActivity(intent)
     }
 
     override fun scrollToPosition(position: Int) {

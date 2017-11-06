@@ -2,40 +2,42 @@ package xyz.mcnallydawes.githubmvp.data.model.local
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.Realm
 import io.realm.RealmObject
 
-fun <T : RealmObject> T.get(id : Int) : Maybe<T> {
-    return Maybe.create {
+fun <T : RealmObject> T.get(id : Int) : Observable<T> {
+    return Observable.create {
         val realm = Realm.getDefaultInstance()
         var obj: T? = null
         val objResult = realm.where(this::class.java).equalTo("id", id).findFirst()
         if (objResult != null) obj = realm.copyFromRealm(objResult)
         realm.close()
-        if (obj != null) it.onSuccess(obj)
-        else it.onComplete()
+        if (obj != null) it.onNext(obj)
+        it.onComplete()
     }
 }
 
-fun <T : RealmObject> T.get(id : String) : Maybe<T> {
-    return Maybe.create {
+fun <T : RealmObject> T.get(id : String) : Observable<T> {
+    return Observable.create {
         val realm = Realm.getDefaultInstance()
         var obj: T? = null
         val objResult = realm.where(this::class.java).equalTo("id", id).findFirst()
         if (objResult != null) obj = realm.copyFromRealm(objResult)
         realm.close()
-        if (obj != null) it.onSuccess(obj)
-        else it.onComplete()
+        if (obj != null) it.onNext(obj)
+        it.onComplete()
     }
 }
 
-fun  <T : RealmObject> T.save(): Single<T> {
-    return Single.create {
+fun  <T : RealmObject> T.save(): Observable<T> {
+    return Observable.create {
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction { it.copyToRealmOrUpdate(this) }
         realm.close()
-        it.onSuccess(this)
+        it.onNext(this)
+        it.onComplete()
     }
 }
 
