@@ -19,7 +19,7 @@ class UserDetailActivity : AppCompatActivity() {
             transaction.commit()
         }
 
-        val userRepo = RepoInjection.provideUserRepo(InjectionUtils.getGithubApi(this))
+        val userRepo = RepoInjection.provideUserRepo(InjectionUtils.getGithubApi())
         UserDetailPresenter(fragment, userRepo)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -19,7 +19,7 @@ class UsersActivity : AppCompatActivity() {
             transaction.commit()
         }
 
-        val userRepo = RepoInjection.provideUserRepo(InjectionUtils.getGithubApi(this))
+        val userRepo = RepoInjection.provideUserRepo(InjectionUtils.getGithubApi())
         UsersPresenter(fragment, userRepo)
 
         supportActionBar?.title = "Github Users"

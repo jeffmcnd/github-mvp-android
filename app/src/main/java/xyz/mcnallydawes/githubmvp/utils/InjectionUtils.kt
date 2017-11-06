@@ -1,9 +1,8 @@
 package xyz.mcnallydawes.githubmvp.utils
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
-import xyz.mcnallydawes.githubmvp.R
+import xyz.mcnallydawes.githubmvp.BuildConfig
 import xyz.mcnallydawes.githubmvp.di.NetInjection
 import xyz.mcnallydawes.githubmvp.github.GithubApi
 
@@ -11,8 +10,8 @@ import xyz.mcnallydawes.githubmvp.github.GithubApi
 object InjectionUtils {
 
     @Provides
-    fun getGithubApi(context: Context) : GithubApi {
-        val apiDomain = context.resources.getString(R.string.api_domain)
+    fun getGithubApi() : GithubApi {
+        val apiDomain = BuildConfig.API_DOMAIN
         return NetInjection.provideGithubApi(
                 NetInjection.provideRetrofit(
                         apiDomain,
