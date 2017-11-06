@@ -9,9 +9,9 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import xyz.mcnallydawes.githubmvp.RxImmediateSchedulerRule
-import org.mockito.Mockito.`when` as whenever
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
+import org.mockito.Mockito.`when` as whenever
 
 class UsersPresenterTest {
 

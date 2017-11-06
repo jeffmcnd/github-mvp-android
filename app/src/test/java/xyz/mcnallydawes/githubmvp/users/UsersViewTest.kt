@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.users
 
+import android.content.Intent
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.junit.Assert.*
@@ -10,11 +11,10 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.shadows.ShadowToast
-import xyz.mcnallydawes.githubmvp.data.model.local.User
 import org.robolectric.shadows.ShadowApplication
-import android.content.Intent
+import org.robolectric.shadows.ShadowToast
 import xyz.mcnallydawes.githubmvp.Constants
+import xyz.mcnallydawes.githubmvp.data.model.local.User
 import xyz.mcnallydawes.githubmvp.userdetail.UserDetailActivity
 
 

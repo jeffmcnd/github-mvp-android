@@ -1,9 +1,6 @@
 package xyz.mcnallydawes.githubmvp.data.source.user
 
 import android.support.test.runner.AndroidJUnit4
-import io.reactivex.Single
-import io.realm.Realm
-import io.realm.RealmObject
 import junit.framework.Assert.assertNotNull
 import org.junit.After
 import org.junit.Before

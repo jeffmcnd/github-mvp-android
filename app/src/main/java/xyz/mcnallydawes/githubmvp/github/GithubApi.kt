@@ -1,6 +1,5 @@
 package xyz.mcnallydawes.githubmvp.github
 
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.GET

@@ -1,7 +1,6 @@
 package xyz.mcnallydawes.githubmvp.data.source.user
 
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.Realm

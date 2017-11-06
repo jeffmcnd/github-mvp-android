@@ -1,11 +1,8 @@
 package xyz.mcnallydawes.githubmvp.data.source.user
 
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.toMaybe
-import io.reactivex.rxkotlin.toSingle
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import javax.inject.Inject
 import javax.inject.Singleton
