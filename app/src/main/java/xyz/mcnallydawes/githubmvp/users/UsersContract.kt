@@ -32,11 +32,13 @@ interface UsersContract {
 
         fun hideList()
 
+        fun setLoading(value: Boolean)
+
     }
 
     interface Presenter {
 
-        fun initialize(savedScrollPosition: Int)
+        fun initialize(state : UsersViewState)
 
         fun terminate()
 
@@ -44,7 +46,7 @@ interface UsersContract {
 
         fun onUserRemoved(user: User)
 
-        fun onNextPage()
+        fun onNextPage(lastUserId: Int, isLoading: Boolean)
 
         fun onRefreshList()
 

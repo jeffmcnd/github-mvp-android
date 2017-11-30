@@ -31,13 +31,12 @@ fun <T : RealmObject> T.get(id : String) : Observable<T> {
     }
 }
 
-fun  <T : RealmObject> T.save(): Observable<T> {
-    return Observable.create {
+fun  <T : RealmObject> T.save(): Single<T> {
+    return Single.create {
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction { it.copyToRealmOrUpdate(this) }
         realm.close()
-        it.onNext(this)
-        it.onComplete()
+        it.onSuccess(this)
     }
 }
 

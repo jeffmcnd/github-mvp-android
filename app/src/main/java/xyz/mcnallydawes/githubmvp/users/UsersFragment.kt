@@ -13,16 +13,16 @@ import kotlinx.android.synthetic.main.fragment_users.*
 import xyz.mcnallydawes.githubmvp.Constants
 import xyz.mcnallydawes.githubmvp.R
 import xyz.mcnallydawes.githubmvp.data.model.local.User
-import xyz.mcnallydawes.githubmvp.userdetail.UserDetailActivity
+import xyz.mcnallydawes.githubmvp.repos.ReposActivity
 import java.util.concurrent.TimeUnit
 
 class UsersFragment: Fragment(), UsersContract.View {
 
     private val VISIBLE_THRESHOLD = 3
 
-    private var presenter: UsersContract.Presenter? = null
-
     private var adapter : UserAdapter? = null
+    private lateinit var presenter: UsersContract.Presenter
+    private lateinit var state : UsersViewState
 
     companion object {
         fun newInstance(): UsersFragment {
@@ -40,32 +40,32 @@ class UsersFragment: Fragment(), UsersContract.View {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val position = savedInstanceState?.getInt("recyclerViewPosition") ?: -1
-        presenter?.initialize(position)
+        state = savedInstanceState?.getParcelable(UsersViewState.KEY) ?: UsersViewState()
+        presenter.initialize(state)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
-        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-        outState?.putInt("recyclerViewPosition", firstVisibleItemPosition)
+        state.scrollPosition = layoutManager.findFirstVisibleItemPosition()
+        outState?.putParcelable(UsersViewState.KEY, state)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter?.terminate()
+        presenter.terminate()
     }
 
     override fun setupUserList() {
         swipeRefreshLayout.setOnRefreshListener {
-            presenter?.onRefreshList()
+            presenter.onRefreshList()
         }
 
         recyclerView.layoutManager = LinearLayoutManager(
                 activity, LinearLayoutManager.VERTICAL, false)
         adapter = UserAdapter(ArrayList(), object : UserClickListener {
             override fun onUserClicked(user: User) {
-                presenter?.onUserClicked(user)
+                presenter.onUserClicked(user)
             }
         })
         recyclerView.adapter = adapter
@@ -79,7 +79,7 @@ class UsersFragment: Fragment(), UsersContract.View {
                 }
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    presenter?.onNextPage()
+                    presenter.onNextPage(state.lastUserId, state.isLoading)
                 }
     }
 
@@ -89,6 +89,7 @@ class UsersFragment: Fragment(), UsersContract.View {
 
     override fun addUsers(users: ArrayList<User>) {
         adapter?.addUsers(users)
+        state.lastUserId = users.last().id
     }
 
     override fun updateUser(user: User) {
@@ -108,7 +109,7 @@ class UsersFragment: Fragment(), UsersContract.View {
     }
 
     override fun showUserView(user: User) {
-        val intent = Intent(activity, UserDetailActivity::class.java)
+        val intent = Intent(activity, ReposActivity::class.java)
         intent.putExtra(Constants.EXTRA_USER_ID, user.id)
         startActivity(intent)
     }
@@ -146,4 +147,9 @@ class UsersFragment: Fragment(), UsersContract.View {
     override fun hideList() {
         recyclerView.visibility = View.INVISIBLE
     }
+
+    override fun setLoading(value: Boolean) {
+        state.isLoading = value
+    }
+
 }

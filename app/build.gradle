@@ -3,6 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
+androidExtensions {
+    experimental = true
+}
+
 android {
 
     compileSdkVersion 26

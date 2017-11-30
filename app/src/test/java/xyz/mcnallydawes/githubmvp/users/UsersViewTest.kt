@@ -15,7 +15,7 @@ import org.robolectric.shadows.ShadowApplication
 import org.robolectric.shadows.ShadowToast
 import xyz.mcnallydawes.githubmvp.Constants
 import xyz.mcnallydawes.githubmvp.data.model.local.User
-import xyz.mcnallydawes.githubmvp.userdetail.UserDetailActivity
+import xyz.mcnallydawes.githubmvp.repos.ReposActivity
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -105,7 +105,7 @@ class UsersViewTest {
     fun testShowUserView() {
         view.showUserView(dummyUser)
 
-        val expectedIntent = Intent(view.activity, UserDetailActivity::class.java)
+        val expectedIntent = Intent(view.activity, ReposActivity::class.java)
         expectedIntent.putExtra(Constants.EXTRA_USER_ID, dummyUser.id)
         val actual = ShadowApplication.getInstance().nextStartedActivity
 

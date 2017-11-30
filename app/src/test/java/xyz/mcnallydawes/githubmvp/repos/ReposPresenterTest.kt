@@ -1,4 +1,4 @@
-package xyz.mcnallydawes.githubmvp.userdetail
+package xyz.mcnallydawes.githubmvp.repos
 
 import io.reactivex.Observable
 import org.junit.Before
@@ -9,10 +9,11 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import xyz.mcnallydawes.githubmvp.RxImmediateSchedulerRule
 import xyz.mcnallydawes.githubmvp.data.model.local.User
+import xyz.mcnallydawes.githubmvp.data.source.repo.RepoRepository
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
 import org.mockito.Mockito.`when` as whenever
 
-class UserDetailPresenterTest {
+class ReposPresenterTest {
 
     companion object {
         @ClassRule
@@ -20,16 +21,17 @@ class UserDetailPresenterTest {
         val rxSchedulers = RxImmediateSchedulerRule()
     }
 
-    private lateinit var presenter: UserDetailPresenter
-    @Mock private lateinit var view: UserDetailContract.View
+    private lateinit var presenter: ReposPresenter
+    @Mock private lateinit var view: ReposContract.View
     @Mock private lateinit var userRepo: UserRepository
+    @Mock private lateinit var repoRepo: RepoRepository
 
     private val dummyUser = User(id = 0, avatarUrl = "avatarUrl", name = "name", username = "username", location = "location")
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = UserDetailPresenter(view, userRepo)
+        presenter = ReposPresenter(view, userRepo, repoRepo)
     }
 
     @Test

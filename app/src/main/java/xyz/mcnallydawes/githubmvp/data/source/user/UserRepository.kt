@@ -3,6 +3,7 @@ package xyz.mcnallydawes.githubmvp.data.source.user
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import xyz.mcnallydawes.githubmvp.data.model.local.Repo
 import xyz.mcnallydawes.githubmvp.data.model.local.User
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,25 +14,23 @@ open class UserRepository @Inject constructor(
         private val remoteDataSource: UserDataSource
 ): UserDataSource {
 
-
-    override fun getAll(): Single<ArrayList<User>> {
+    override fun getAll(): Observable<ArrayList<User>> {
         return localDataSource.getAll()
     }
 
-    override fun getAllUsers(lastUserId: Int): Single<ArrayList<User>> {
+    override fun getAllUsers(lastUserId: Int): Observable<ArrayList<User>> {
         return localDataSource.getAllUsers(lastUserId)
                 .flatMap {
-                    if (it.isEmpty()) {
+                    if (it.size == 0) {
                         remoteDataSource.getAllUsers(lastUserId)
-                                .flatMap { localDataSource.saveAll(it) }
-                    }
-                    else Single.just(it)
+                                .flatMapSingle { localDataSource.saveAll(it) }
+                    } else Observable.just(it)
                 }
     }
 
     override fun get(id: Int): Observable<User> {
         return remoteDataSource.get(id)
-                .flatMap { localDataSource.save(it) }
+                .flatMapSingle { localDataSource.save(it) }
                 .publish { network ->
                     Observable.merge(
                             network,
@@ -44,7 +43,7 @@ open class UserRepository @Inject constructor(
         return localDataSource.saveAll(objects)
     }
 
-    override fun save(obj: User): Observable<User> {
+    override fun save(obj: User): Single<User> {
         return localDataSource.save(obj)
     }
 

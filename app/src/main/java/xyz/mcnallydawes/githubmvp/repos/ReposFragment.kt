@@ -1,35 +1,42 @@
-package xyz.mcnallydawes.githubmvp.userdetail
+package xyz.mcnallydawes.githubmvp.repos
 
 import android.app.Fragment
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_user_detail.*
+import kotlinx.android.synthetic.main.fragment_repos.*
 import xyz.mcnallydawes.githubmvp.Constants
 import xyz.mcnallydawes.githubmvp.R
+import xyz.mcnallydawes.githubmvp.data.model.local.Repo
+import xyz.mcnallydawes.githubmvp.repodetail.RepoAdapter
 import xyz.mcnallydawes.githubmvp.utils.CircleTransform
 
-class UserDetailFragment : Fragment(), UserDetailContract.View {
+class ReposFragment : Fragment(), ReposContract.View {
 
-    private var presenter : UserDetailContract.Presenter? = null
+    private var presenter : ReposContract.Presenter? = null
+
+    private var adapter : RepoAdapter? = null
 
     companion object {
-        fun newInstance(): UserDetailFragment {
-            return UserDetailFragment()
+        fun newInstance(): ReposFragment {
+            return ReposFragment()
         }
     }
 
-    override fun setPresenter(presenter: UserDetailContract.Presenter) {
+    override fun setPresenter(presenter: ReposContract.Presenter) {
         this.presenter = presenter
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater?.inflate(R.layout.fragment_user_detail, container, false)
+        return inflater?.inflate(R.layout.fragment_repos, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -53,8 +60,21 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
         presenter?.terminate()
     }
 
+    override fun setupReposList() {
+        reposRv.layoutManager =
+                object : LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) {
+                    override fun canScrollVertically(): Boolean { return false }
+                }
+        adapter = RepoAdapter(ArrayList(), object : RepoClickListener {
+            override fun onRepoClicked(repo: Repo) {
+                presenter?.onRepoClicked(repo)
+            }
+        })
+        reposRv.adapter = adapter
+    }
+
     override fun setTitle(title: String) {
-        (activity as UserDetailActivity).supportActionBar?.title = title
+        (activity as ReposActivity).supportActionBar?.title = title
     }
 
     override fun setAvatarIv(url: String) {
@@ -85,11 +105,34 @@ class UserDetailFragment : Fragment(), UserDetailContract.View {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showProgressbar() {
-        progressBar.visibility = View.VISIBLE
+    override fun showUserProgressbar() {
+        userProgressBar.visibility = View.VISIBLE
     }
 
-    override fun hideProgressbar() {
-        progressBar.visibility = View.GONE
+    override fun hideUserProgressbar() {
+        userProgressBar.visibility = View.GONE
     }
+
+    override fun showReposProgressbar() {
+        reposProgressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideReposProgressbar() {
+        reposProgressBar.visibility = View.GONE
+    }
+
+    override fun setRepos(repos: ArrayList<Repo>) {
+        adapter?.replaceRepos(repos)
+    }
+
+    override fun showEmptyReposView() {
+//        TODO: show empty view
+    }
+
+    override fun showRepoUrl(url: String) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
+    }
+
 }

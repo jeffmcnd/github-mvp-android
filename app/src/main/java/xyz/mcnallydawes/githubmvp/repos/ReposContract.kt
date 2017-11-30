@@ -1,10 +1,14 @@
-package xyz.mcnallydawes.githubmvp.userdetail
+package xyz.mcnallydawes.githubmvp.repos
 
-interface UserDetailContract {
+import xyz.mcnallydawes.githubmvp.data.model.local.Repo
+
+interface ReposContract {
 
     interface View {
 
         fun setPresenter(presenter : Presenter)
+
+        fun setupReposList()
 
         fun setTitle(title : String)
 
@@ -20,9 +24,19 @@ interface UserDetailContract {
 
         fun showErrorMessage(message : String)
 
-        fun showProgressbar()
+        fun showUserProgressbar()
 
-        fun hideProgressbar()
+        fun hideUserProgressbar()
+
+        fun setRepos(repos : ArrayList<Repo>)
+
+        fun showEmptyReposView()
+
+        fun showRepoUrl(url : String)
+
+        fun showReposProgressbar()
+
+        fun hideReposProgressbar()
 
     }
 
@@ -33,6 +47,8 @@ interface UserDetailContract {
         fun terminate()
 
         fun onBackBtnClicked()
+
+        fun onRepoClicked(repo : Repo)
 
     }
 

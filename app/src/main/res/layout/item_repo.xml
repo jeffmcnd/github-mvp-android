@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:selectableItemBackground"
+    >
+
+    <TextView
+        android:id="@+id/nameTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/watchersCountTv"
+        app:layout_constraintBottom_toTopOf="@id/stargazersCountTv"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        android:clickable="false"
+        android:focusable="false"
+        tools:text="Github MVP"
+        />
+
+    <ImageView
+        android:id="@+id/stargazersIv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        app:layout_constraintTop_toTopOf="@id/stargazersCountTv"
+        app:layout_constraintStart_toStartOf="@id/nameTv"
+        app:layout_constraintBottom_toBottomOf="@id/stargazersCountTv"
+        android:src="@drawable/ic_star_black_24dp"
+        android:tint="@color/colorAccent"
+        />
+
+    <TextView
+        android:id="@+id/stargazersCountTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/nameTv"
+        app:layout_constraintStart_toEndOf="@id/stargazersIv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        tools:text="5"
+        />
+
+    <TextView
+        android:id="@+id/watchersTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="16dp"
+        android:text="@string/watchers"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        />
+
+    <TextView
+        android:id="@+id/watchersCountTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/watchersTv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="4dp"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        tools:text="3"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorDivider"
+        />
+
+</android.support.constraint.ConstraintLayout>

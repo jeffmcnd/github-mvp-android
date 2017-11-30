@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".userdetail.UserDetailActivity" />
+        <activity android:name=".repos.ReposActivity" />
     </application>
 
 </manifest>

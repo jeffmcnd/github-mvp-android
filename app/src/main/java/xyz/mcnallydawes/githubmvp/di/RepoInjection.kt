@@ -2,6 +2,9 @@ package xyz.mcnallydawes.githubmvp.di
 
 import dagger.Module
 import dagger.Provides
+import xyz.mcnallydawes.githubmvp.data.source.repo.RepoLocalDataSource
+import xyz.mcnallydawes.githubmvp.data.source.repo.RepoRemoteDataSource
+import xyz.mcnallydawes.githubmvp.data.source.repo.RepoRepository
 import xyz.mcnallydawes.githubmvp.data.source.user.UserLocalDataSource
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRemoteDataSource
 import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
@@ -12,8 +15,13 @@ import javax.inject.Singleton
 object RepoInjection {
 
     @Provides @Singleton
-    fun provideUserRepo(githubApi: GithubApi): UserRepository {
+    fun provideUserRepo(githubApi: GithubApi) : UserRepository {
         return UserRepository(UserLocalDataSource(), UserRemoteDataSource(githubApi))
+    }
+
+    @Provides @Singleton
+    fun provideRepoRepo(githubApi: GithubApi) : RepoRepository {
+        return RepoRepository(RepoLocalDataSource(), RepoRemoteDataSource(githubApi))
     }
 
 }

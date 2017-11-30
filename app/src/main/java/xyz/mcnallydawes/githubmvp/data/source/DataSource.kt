@@ -1,20 +1,21 @@
 package xyz.mcnallydawes.githubmvp.data.source.user
 
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 
-interface DataSource<I, T> {
+interface DataSource<T> {
 
-    fun get(id: I) : Observable<T>
+    fun get(id: Int) : Observable<T>
 
-    fun getAll() : Single<ArrayList<T>>
+    fun getAll() : Observable<ArrayList<T>>
 
-    fun save(obj : T) : Observable<T>
+    fun save(obj : T) : Single<T>
 
     fun saveAll(objects: ArrayList<T>) : Single<ArrayList<T>>
 
-    fun remove(id: I) : Completable
+    fun remove(id: Int) : Completable
 
     fun removeAll() : Completable
 

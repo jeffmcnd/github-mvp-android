@@ -1,5 +1,6 @@
 package xyz.mcnallydawes.githubmvp.users
 
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -12,18 +13,23 @@ class UsersPresenter(
         private val userRepo: UserRepository
 ) : UsersContract.Presenter {
 
-    private var lastUserId = 0
-    private var loading = false
     private val disposables = CompositeDisposable()
-    private var savedScrollPosition = -1
 
     init {
         view.setPresenter(this)
     }
 
-    override fun initialize(savedScrollPosition: Int) {
-        this.savedScrollPosition = savedScrollPosition
+    override fun initialize(state: UsersViewState) {
         view.setupUserList()
+
+        getAllUsersFromLastUserId(0)
+                .subscribe({
+                    view.addUsers(it)
+                    if (state.scrollPosition >= 0) view.scrollToPosition(state.scrollPosition)
+                }, {
+                    view.showErrorMessage()
+                })
+                .addTo(disposables)
     }
 
     override fun terminate() {
@@ -39,26 +45,12 @@ class UsersPresenter(
         view.removeUser(user)
     }
 
-    override fun onNextPage() {
-        if (loading) return
+    override fun onNextPage(lastUserId: Int, isLoading: Boolean) {
+        if (isLoading) return
 
-        loading = true
-        userRepo.getAllUsers(lastUserId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    loading = false
-                    view.showList()
-                    view.hideRefreshIndicator()
-                }
+        getAllUsersFromLastUserId(lastUserId)
                 .subscribe({
-                    lastUserId = it.last().id
                     view.addUsers(it)
-
-                    if (savedScrollPosition >= 0) {
-                        view.scrollToPosition(savedScrollPosition)
-                        savedScrollPosition = -1
-                    }
                 }, {
                     view.showErrorMessage()
                 })
@@ -71,12 +63,20 @@ class UsersPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    lastUserId = 0
                     view.removeAllUsers()
                 }, {
                     view.showErrorMessage()
                 })
                 .addTo(disposables)
+    }
+
+    private fun getAllUsersFromLastUserId(lastUserId: Int) : Observable<ArrayList<User>> {
+        return userRepo.getAllUsers(lastUserId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { view.setLoading(true) }
+                .doOnNext { view.setLoading(false) }
+                .doOnError { view.setLoading(false) }
     }
 
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Github MVP</string>
+    <string name="watchers">watchers</string>
+    <string name="repos">Repos</string>
 </resources>
