@@ -6,7 +6,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import xyz.mcnallydawes.githubmvp.github.GithubApi
+import xyz.mcnallydawes.githubmvp.BuildConfig
+import xyz.mcnallydawes.githubmvp.data.api.GithubApi
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -40,6 +41,19 @@ object NetInjection {
     @Throws(IllegalStateException::class)
     fun provideGithubApi(retrofit: Retrofit): GithubApi {
         return retrofit.create(GithubApi::class.java)
+    }
+
+    @Provides
+    fun getGithubApi() : GithubApi {
+        val apiDomain = BuildConfig.API_DOMAIN
+        return NetInjection.provideGithubApi(
+                NetInjection.provideRetrofit(
+                        apiDomain,
+                        NetInjection.provideOkHttpClient(
+                                20L
+                        )
+                )
+        )
     }
 
 }

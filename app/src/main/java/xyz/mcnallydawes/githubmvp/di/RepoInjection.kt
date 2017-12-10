@@ -2,13 +2,13 @@ package xyz.mcnallydawes.githubmvp.di
 
 import dagger.Module
 import dagger.Provides
-import xyz.mcnallydawes.githubmvp.data.source.repo.RepoLocalDataSource
-import xyz.mcnallydawes.githubmvp.data.source.repo.RepoRemoteDataSource
-import xyz.mcnallydawes.githubmvp.data.source.repo.RepoRepository
-import xyz.mcnallydawes.githubmvp.data.source.user.UserLocalDataSource
-import xyz.mcnallydawes.githubmvp.data.source.user.UserRemoteDataSource
-import xyz.mcnallydawes.githubmvp.data.source.user.UserRepository
-import xyz.mcnallydawes.githubmvp.github.GithubApi
+import xyz.mcnallydawes.githubmvp.data.repo.repo.RepoLocalDataSource
+import xyz.mcnallydawes.githubmvp.data.repo.repo.RepoRemoteDataSource
+import xyz.mcnallydawes.githubmvp.data.repo.repo.RepoRepository
+import xyz.mcnallydawes.githubmvp.data.repo.user.UserLocalDataSource
+import xyz.mcnallydawes.githubmvp.data.repo.user.UserRemoteDataSource
+import xyz.mcnallydawes.githubmvp.data.repo.user.UserRepository
+import xyz.mcnallydawes.githubmvp.data.api.GithubApi
 import javax.inject.Singleton
 
 @Module
