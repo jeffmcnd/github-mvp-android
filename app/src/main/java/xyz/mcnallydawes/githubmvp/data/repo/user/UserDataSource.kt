@@ -7,4 +7,6 @@ interface UserDataSource : DataSource<User> {
 
     fun getAllUsers(lastUserId: Int) : Observable<ArrayList<User>>
 
+    fun searchUsers(q: String, sort: String?, order: String?) : Observable<ArrayList<User>>
+
 }

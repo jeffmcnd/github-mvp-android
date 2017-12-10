@@ -35,6 +35,7 @@ class ReposActivity : AppCompatActivity(), ReposContract.View {
         ReposPresenter(this, userRepo, repoRepo)
         presenter.initialize(userId)
 
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -45,7 +46,7 @@ class ReposActivity : AppCompatActivity(), ReposContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                presenter?.onBackBtnClicked()
+                presenter.onBackBtnClicked()
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -2,4 +2,7 @@
     <string name="app_name">Github MVP</string>
     <string name="watchers">watchers</string>
     <string name="repos">Repos</string>
+    <string name="search_users">Search users</string>
+    <string name="no_results">No results</string>
+    <string name="search">Search</string>
 </resources>

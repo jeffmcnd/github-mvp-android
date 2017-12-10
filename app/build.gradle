@@ -72,6 +72,7 @@ dependencies {
     implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${rxBindingVersion}"
 
     implementation 'com.google.dagger:dagger:2.9'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
 
     testImplementation 'junit:junit:4.12'

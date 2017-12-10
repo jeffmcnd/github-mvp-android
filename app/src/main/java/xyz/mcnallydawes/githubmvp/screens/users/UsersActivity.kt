@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
@@ -14,6 +16,7 @@ import xyz.mcnallydawes.githubmvp.data.model.User
 import xyz.mcnallydawes.githubmvp.di.NetInjection
 import xyz.mcnallydawes.githubmvp.di.RepoInjection
 import xyz.mcnallydawes.githubmvp.screens.repos.ReposActivity
+import xyz.mcnallydawes.githubmvp.screens.searchusers.SearchUsersActivity
 import java.util.concurrent.TimeUnit
 
 class UsersActivity : AppCompatActivity(), UsersContract.View {
@@ -35,14 +38,14 @@ class UsersActivity : AppCompatActivity(), UsersContract.View {
         val userRepo = RepoInjection.provideUserRepo(NetInjection.getGithubApi())
         UsersPresenter(this, userRepo)
 
+        setSupportActionBar(toolbar)
+
         state = if (savedInstanceState != null && savedInstanceState.containsKey(UsersViewState.KEY)) {
             savedInstanceState[UsersViewState.KEY] as UsersViewState
         } else {
             UsersViewState()
         }
         presenter.initialize(state)
-
-        supportActionBar?.title = "Github Users"
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -50,6 +53,22 @@ class UsersActivity : AppCompatActivity(), UsersContract.View {
         val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
         state.scrollPosition = layoutManager.findFirstVisibleItemPosition()
         outState?.putParcelable(UsersViewState.KEY, state)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_users, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuSearch -> {
+                presenter.onSearchBtnClicked()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {
@@ -151,6 +170,10 @@ class UsersActivity : AppCompatActivity(), UsersContract.View {
 
     override fun setLoading(value: Boolean) {
         state.isLoading = value
+    }
+
+    override fun goToSearch() {
+        startActivity(Intent(this, SearchUsersActivity::class.java))
     }
 
 }

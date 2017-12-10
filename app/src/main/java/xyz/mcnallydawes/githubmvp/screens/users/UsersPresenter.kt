@@ -79,4 +79,8 @@ class UsersPresenter(
                 .doOnError { view.setLoading(false) }
     }
 
+    override fun onSearchBtnClicked() {
+        view.goToSearch()
+    }
+
 }

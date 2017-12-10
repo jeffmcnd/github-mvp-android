@@ -11,42 +11,20 @@ class UserAdapter(
         private val listener: UserClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val FOOTER_VIEW = 1
-
-    override fun getItemViewType(position: Int): Int {
-        return if (position == users.size) FOOTER_VIEW else super.getItemViewType(position)
-    }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (getItemViewType(position)) {
-            FOOTER_VIEW -> {
-                (holder as UserLoadingViewHolder).bind()
-            }
-            else -> {
-                val vh = holder as UserViewHolder
-                vh.bind(users[position], listener)
-            }
-        }
+        val vh = holder as UserViewHolder
+        vh.bind(users[position], listener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         val context = parent?.context
-        return when (viewType) {
-            FOOTER_VIEW -> {
-                val view = LayoutInflater.from(context)
-                        .inflate(R.layout.item_user_loading, parent, false)
-                UserLoadingViewHolder(view)
-            }
-            else -> {
-                val view = LayoutInflater.from(context)
-                        .inflate(R.layout.item_user, parent, false)
-                UserViewHolder(view)
-            }
-        }
+        val view = LayoutInflater.from(context)
+                .inflate(R.layout.item_user, parent, false)
+        return UserViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return users.size + 1
+        return users.size
     }
 
     fun getUser(position: Int) : User {

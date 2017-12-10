@@ -25,6 +25,9 @@ class UserLocalDataSource : UserDataSource {
         }
     }
 
+    override fun searchUsers(q: String, sort: String?, order: String?): Observable<ArrayList<User>> =
+            Observable.error(NotImplementedError())
+
     override fun getAll() : Observable<ArrayList<User>> {
         return Observable.create {
             val users = ArrayList<User>()

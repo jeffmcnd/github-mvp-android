@@ -27,6 +27,9 @@ open class UserRepository @Inject constructor(
                 }
     }
 
+    override fun searchUsers(q: String, sort: String?, order: String?): Observable<ArrayList<User>> =
+            remoteDataSource.searchUsers(q, sort, order)
+
     override fun get(id: Int): Observable<User> {
         return remoteDataSource.get(id)
                 .flatMapSingle { localDataSource.save(it) }

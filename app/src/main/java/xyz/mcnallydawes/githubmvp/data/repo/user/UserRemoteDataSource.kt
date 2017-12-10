@@ -25,6 +25,10 @@ class UserRemoteDataSource @Inject constructor(private val githubApi: GithubApi)
         }
     }
 
+    override fun searchUsers(q: String, sort: String?, order: String?): Observable<ArrayList<User>> =
+            githubApi.searchUsers(q, sort, order)
+                    .map { it.items }
+
     override fun getAll(): Observable<ArrayList<User>> = Observable.error(Throwable("not implemented"))
 
     override fun get(id: Int): Observable<User> {
