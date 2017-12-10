@@ -46,6 +46,7 @@ android {
 ext {
     constraintLayoutVersion = '1.0.2'
     mockitoVersion = '2.10.0'
+    mockitoKotlinVersion = '1.5.0'
     picassoVersion = '2.5.2'
     robolectricVersion = '3.5.1'
     rxBindingVersion = '2.0.0'
@@ -77,6 +78,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
     testImplementation "org.robolectric:robolectric:${robolectricVersion}"
     androidTestImplementation "org.mockito:mockito-android:${mockitoVersion}"
 

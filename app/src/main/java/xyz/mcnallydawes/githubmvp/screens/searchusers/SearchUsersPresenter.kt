@@ -43,9 +43,15 @@ class SearchUsersPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    view.updateUsers(it)
-                    view.hideEmptyView()
-                    view.showRecyclerView()
+                    if (it.isEmpty()) {
+                        view.clearRecyclerView()
+                        view.showEmptyView()
+                        view.hideRecyclerView()
+                    } else {
+                        view.updateUsers(it)
+                        view.hideEmptyView()
+                        view.showRecyclerView()
+                    }
                 }, {
                     view.clearRecyclerView()
                     view.hideRecyclerView()
